@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Game</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: black;
+            color: #00FF00;
+            text-align: center;
+            margin: 20px;
+        }
+        #output, #xor-output {
+            margin: 20px;
+            font-size: 18px;
+            white-space: pre-wrap; /* Ensure whitespace is preserved */
+        }
+        input, button {
+            background-color: black;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            padding: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #00FF00;
+            color: black;
+            cursor: pointer;
+        }
+        #history {
+            text-align: left; /* Align text to left for better readability */
+            margin: 20px;
+            font-size: 16px;
+            border-top: 1px solid #00FF00;
+            padding-top: 10px;
+        }
+        .history-item {
+            margin-bottom: 20px; /* Increased spacing between items */
+            padding: 10px;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            background-color: #000000;
+        }
+        .history-item pre {
+            margin: 0; /* Remove extra margin for pre elements */
+        }
+        @media (max-width: 600px) {
+            input, button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Cipher</h1>
+    <p>Guess either the message or key to win.</p>
+    <p>Message and key are two five-letter words that share a common theme.</p>
+    <p>[!] indicates that the message and key have a letter in common.</p>
+    <p>The XOR of the message and key is:</p>
+    <div id="xor-output"></div>
+    <input type="text" id="guess" placeholder="Enter your guess (5 letters)">
+    <button onclick="checkGuess()">Submit Guess</button>
+    <button onclick="resetGame()">Reset Game</button>
+    
+    <div id="output"></div>
+    <div id="history"></div>
+
+    <script>
+        const message = "hello";
+        const key = "world";
+        const size = message.length;
+
+        function toPrintableChar(byte) {
+            return String.fromCharCode((byte % 94) + 33);
+        }
+
+        function xorStrings(string1, string2) {
+            let result = "";
+            for (let i = 0; i < size; i++) {
+                result += toPrintableChar(string1.charCodeAt(i) ^ string2.charCodeAt(i));
+            }
+            return result;
+        }
+
+        function formatWithBrackets(str) {
+            return str.split('').map(char => `[${char}]`).join(' ');
+        }
+
+        function displayInitialXor() {
+            const xor = xorStrings(message, key);
+            document.getElementById('xor-output').innerText = formatWithBrackets(xor);
+        }
+
+        function checkGuess() {
+            const guess = document.getElementById('guess').value.trim().toLowerCase(); // Convert input to lowercase
+            if (guess.length !== size || !/^[a-z]{5}$/.test(guess)) {
+                document.getElementById('output').innerText = "Invalid input. Please enter exactly 5 lowercase letters.";
+                return;
+            }
+
+            if (guess === message || guess === key) {
+                document.getElementById('output').innerText = `Congratulations! The message was "${message}" and the key was "${key}".`;
+                return;
+            }
+
+            const messageGuess = xorStrings(message, guess);
+            const keyGuess = xorStrings(key, guess);
+            
+            const historyDiv = document.getElementById('history');
+            const newHistoryItem = document.createElement('div');
+            newHistoryItem.className = 'history-item';
+            newHistoryItem.innerHTML = `
+                <p><strong>Your Guess:</strong> ${guess}</p>
+                <pre><strong>Message XOR guess:</strong> ${formatWithBrackets(messageGuess)}</pre>
+                <pre><strong>Key XOR guess:</strong> ${formatWithBrackets(keyGuess)}</pre>
+            `;
+            historyDiv.appendChild(newHistoryItem);
+        }
+
+        function resetGame() {
+            document.getElementById('guess').value = '';
+            document.getElementById('output').innerText = '';
+            document.getElementById('history').innerHTML = ''; // Clear history on reset
+        }
+
+        displayInitialXor();
+    </script>
+</body>
+</html>
