@@ -9,7 +9,7 @@
             font-family: 'Courier New', Courier, monospace;
             background-color: black;
             color: #00FF00; /* Matrix green text */
-            text-align: center;
+            text-align: ;
             margin: 20px;
         }
         #output, #xor-output {
@@ -54,14 +54,12 @@
     </style>
 </head>
 <body>
-    <h1>Cipher Game</h1>
-    <p>Welcome to Cipher</p>
-    <p>- Guess the secret message to win.</p>
-    <p>- When you guess, each letter of your guess gets transformed into a symbol depending on the message.</p>
+    <h1>Welcome to Cipher</h1>
+    <p>- Guess the secret message to win. This message has been XOR encrypted with a secret key.</p>
+    <p>- When you guess, each letter of your guess gets transformed depending on the message.</p>
     <p>- The same letter in the same position will always get transformed into the same symbol.</p>
     <p>- Not all transformations are unique, but letters will always transform the same way.</p>
     <p>- A [!] indicates that you've guessed a correct letter.</p>
-    <p>- If you get repeated symbols in the output they COULD be the same letter.</p>
     <input type="text" id="guess" placeholder="Enter your guess (5 letters)">
     <button onclick="checkGuess()">Submit Guess</button>
     <button onclick="resetGame()">Reset Game</button>
