@@ -55,11 +55,11 @@
 </head>
 <body>
     <h1>Welcome to Cipher</h1>
-    <p>- Guess the secret message to win. This message has been XOR encrypted with a secret key.</p>
-    <p>- When you guess, each letter of your guess gets transformed depending on the message.</p>
-    <p>- The same letter in the same position will always get transformed into the same symbol.</p>
-    <p>- Not all transformations are unique, but letters will always transform the same way.</p>
-    <p>- A [!] indicates that you've guessed a correct letter.</p>
+    <p>- Guess the secret message or key to win.</p>
+    <p>- Each letter of your guess will be transformed by each letter of the message and each letter of the key to produce two symbols.</p>
+    <p>- A [!] symbol indicates that you've guessed a correct letter.</p>
+    <p>- Identical letters will always be transformed into identical symbols if their corresponding letters in message or key are identical.</p>
+    <p>- Warning. Different letters may get transformed into identical symbols. Not all transformations are unique.</p>
     <input type="text" id="guess" placeholder="Enter your guess (5 letters)">
     <button onclick="checkGuess()">Submit Guess</button>
     <button onclick="resetGame()">Reset Game</button>
@@ -106,13 +106,15 @@
             }
 
             const messageGuess = xorStrings(message, guess);
+            const keyGuess = xorStrings(key, guess);
             
             const historyDiv = document.getElementById('history');
             const newHistoryItem = document.createElement('div');
             newHistoryItem.className = 'history-item';
             newHistoryItem.innerHTML = `
                 <p><strong>Your Guess:</strong> ${guess}</p>
-                <pre><strong>Output:</strong> ${formatWithBrackets(messageGuess)}</pre>
+                <pre><strong>Message Output:</strong> ${formatWithBrackets(messageGuess)}</pre>
+                <pre><strong>Key Output:</strong>     ${formatWithBrackets(keyGuess)}</pre>
             `;
             historyDiv.appendChild(newHistoryItem);
         }
